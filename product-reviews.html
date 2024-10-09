@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отзывы о продукте</title>
+</head>
+<body>
+    <h1 id="productNameDisplay"></h1>
+    <div id="reviewsList"></div>
+    <a href="view-reviews.html">Назад к списку отзывов</a>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const productName = urlParams.get('product');
+        const productNameDisplay = document.getElementById('productNameDisplay');
+        const reviewsList = document.getElementById('reviewsList');
+        const reviews = JSON.parse(localStorage.getItem('reviews')) || {};
+
+        if (productName && reviews[productName]) {
+            productNameDisplay.textContent = productName;
+
+            reviews[productName].forEach((review, index) => {
+                const reviewDiv = document.createElement('div');
+                reviewDiv.innerHTML = `
+                    <p>${review}</p>
+                    <button onclick="deleteReview('${productName}', ${index})">Удалить</button>
+                `;
+                reviewsList.appendChild(reviewDiv);
+            });
+        } else {
+            reviewsList.innerHTML = "<p>Нет отзывов для этого продукта.</p>";
+        }
+
+        function deleteReview(productName, reviewIndex) {
+            reviews[productName].splice(reviewIndex, 1);
+            if (reviews[productName].length === 0) {
+                delete reviews[productName];
+            }
+            localStorage.setItem('reviews', JSON.stringify(reviews));
+            location.reload();
+        }
+    </script>
+</body>
+</html>

@@ -19,28 +19,9 @@
         } else {
             for (const product in reviews) {
                 const productDiv = document.createElement('div');
-                productDiv.innerHTML = `<h3>${product}</h3>`;
-                
-                reviews[product].forEach((review, index) => {
-                    const reviewDiv = document.createElement('div');
-                    reviewDiv.innerHTML = `
-                        <p>${review}</p>
-                        <button onclick="deleteReview('${product}', ${index})">Удалить</button>
-                    `;
-                    productDiv.appendChild(reviewDiv);
-                });
-
+                productDiv.innerHTML = `<h3><a href="product-reviews.html?product=${encodeURIComponent(product)}">${product}</a></h3>`;
                 reviewsContainer.appendChild(productDiv);
             }
-        }
-
-        function deleteReview(productName, reviewIndex) {
-            reviews[productName].splice(reviewIndex, 1);
-            if (reviews[productName].length === 0) {
-                delete reviews[productName];
-            }
-            localStorage.setItem('reviews', JSON.stringify(reviews));
-            location.reload();
         }
     </script>
 </body>
